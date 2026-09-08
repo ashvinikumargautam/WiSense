@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     simulator_subcarriers: int = 64
     simulator_noise_level: float = 0.05
     simulator_movement_intensity: float = 1.0
-    train_auto_generate: bool = True
+    train_auto_generate: bool = False
 
     @property
     def cors_origin_list(self) -> list[str]:
