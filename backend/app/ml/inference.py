@@ -1,7 +1,7 @@
 import numpy as np
 import logging
 from typing import Optional
-from wisense.backend.app.ml.ModelManager import ModelManager
+from app.ModelManager import ModelManager
 from app.signal_processing.preprocessing import SignalPreprocessor
 from app.signal_processing.features import FeatureExtractor
 
