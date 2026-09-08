@@ -10,7 +10,7 @@ from app.api.auth import verify_token_query
 from app.api import auth, devices, sensing, training, history
 from app.websocket.manager import ws_manager
 from app.services.sensing_service import sensing_service
-from wisense.backend.app.ml.ModelManager import ModelManager
+from app.ml.ModelManager import ModelManager
 
 logging.basicConfig(
     level=logging.INFO,
