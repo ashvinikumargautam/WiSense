@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import type { SensingMessage } from '../types'
 
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_WS_URL?: string | undefined
+  }
+}
+
 interface UseWebSocketOptions {
   onMessage?: (msg: SensingMessage) => void
   autoConnect?: boolean
@@ -18,9 +24,21 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
   const connect = useCallback(() => {
     const token = localStorage.getItem('wisense_token')
     if (!token) return
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const host = window.location.host
-    const url = `${protocol}//${host}/ws/sensing?token=${token}`
+
+    const env = import.meta.env as {
+      readonly VITE_API_URL?: string | undefined
+      readonly VITE_WS_URL?: string | undefined
+    }
+    const wsBase = env.VITE_WS_URL
+
+    let url: string
+    if (wsBase) {
+      url = `${wsBase}/ws/sensing?token=${token}`
+    } else {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+      const host = window.location.host
+      url = `${protocol}//${host}/ws/sensing?token=${token}`
+    }
 
     const ws = new WebSocket(url)
     wsRef.current = ws
