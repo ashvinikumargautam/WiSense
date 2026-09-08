@@ -15,7 +15,7 @@ from app.api import auth, devices, sensing, training, history
 # from app.api import sensing_service
 # from app.services.sensing_service import sensing_service
 from app.websocket.manager import ws_manager
-from app.model_manager import ModelManager
+from app.ModelManager import ModelManager
 
 # This magic line stops Python from checking for circular imports immediately
 # It allows your app to load even if `app/api` depends on `app`

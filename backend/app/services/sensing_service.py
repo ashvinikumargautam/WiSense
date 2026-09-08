@@ -10,7 +10,7 @@ from app.data_sources.esp32 import ESP32CSIDataSource
 from app.signal_processing.preprocessing import SignalPreprocessor
 from app.signal_processing.features import FeatureExtractor
 from app.ml.inference import MLInference
-from app.ml.model_manager import ModelManager
+from wisense.backend.app.ml.ModelManager import ModelManager
 from app.websocket.manager import ws_manager
 from app.config import settings
 from app.database.database import async_session

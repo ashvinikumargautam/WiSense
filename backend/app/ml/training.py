@@ -10,7 +10,7 @@ from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     confusion_matrix, classification_report,
 )
-from app.ml.model_manager import ModelManager
+from wisense.backend.app.ml.ModelManager import ModelManager
 from app.signal_processing.preprocessing import SignalPreprocessor
 from app.signal_processing.features import FeatureExtractor
 

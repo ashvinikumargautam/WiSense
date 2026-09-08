@@ -4,7 +4,7 @@ import os
 import tempfile
 from app.ml.training import MLTrainer
 from app.ml.inference import MLInference
-from app.ml.model_manager import ModelManager
+from wisense.backend.app.ml.ModelManager import ModelManager
 
 def test_training_pipeline():
     with tempfile.TemporaryDirectory() as tmp:

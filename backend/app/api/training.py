@@ -9,7 +9,7 @@ from app.database.models import TrainingSession, TrainingSample, ModelVersion, U
 from app.api.auth import get_current_user
 from app.services.sensing_service import sensing_service
 from app.ml.training import MLTrainer
-from app.ml.model_manager import ModelManager
+from wisense.backend.app.ml.ModelManager import ModelManager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/training", tags=["training"])
