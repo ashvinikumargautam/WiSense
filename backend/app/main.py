@@ -144,27 +144,27 @@ async def websocket_device(websocket: WebSocket, device_id: str, token: str = Qu
 
     await websocket.accept()
     logger.info(f"ESP32 device {device_id} connected")
-    
-    # Find or create ESP32 data source
-    from app.data_sources.esp32 import ESP32CSIDataSource
-    esp32_source = None
-    
-    # Check if we already have a running instance or create a new one
-    if 'sensing_service' not in locals():
-        from app.services.sensing_service import SensingService
-        sensing_service = SensingService()
 
-    if sensing_service.is_running:
-        esp32_source = sensing_service.data_source
-        if hasattr(esp32_source, 'device_id') and esp32_source.device_id == device_id:
-            pass
-        else:
-            esp32_source = ESP32CSIDataSource(device_id=device_id)
+    # Use the shared sensing_service singleton (the same one /api/sensing/*
+    # routes and the simulator use) instead of a throwaway local instance,
+    # so packets actually reach the buffer/inference pipeline.
+    from app.services.sensing_service import sensing_service
+    from app.data_sources.esp32 import ESP32CSIDataSource
+
+    if not sensing_service.is_running or sensing_service.current_data_source_type != "esp32" \
+            or sensing_service.current_device_id != device_id:
+        await sensing_service.start(source_type="esp32", device_id=device_id)
+
+    esp32_source = sensing_service.data_source
+    if not isinstance(esp32_source, ESP32CSIDataSource):
+        logger.error(f"sensing_service did not start an ESP32 source for {device_id}")
+        await websocket.close(code=1011, reason="Server could not start ESP32 source")
+        return
+
     try:
         while True:
             data = await websocket.receive_json()
-            if esp32_source:
-                esp32_source.receive_esp32_data(data)
+            esp32_source.receive_esp32_data(data)
     except WebSocketDisconnect:
         logger.info(f"ESP32 device {device_id} disconnected")
     except Exception as e:
